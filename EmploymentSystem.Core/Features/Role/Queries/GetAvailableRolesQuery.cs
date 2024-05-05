@@ -1,16 +1,10 @@
-﻿using EmploymentSystem.Core.Dto.Account;
-using EmploymentSystem.Core.Dto;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EmploymentSystem.Core.Dto;
 using EmploymentSystem.Core.Dto.Role;
+using MediatR;
 
 namespace EmploymentSystem.Core.Features.CommandHandlers.Queries
 {
-    public class GetAvailableRolesQuery:IRequest<CommonResponse<List<RoleDto>>>
+    public class GetAvailableRolesQuery : IRequest<CommonResponse<List<RoleDto>>>
     {
     }
 }

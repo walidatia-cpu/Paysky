@@ -1,26 +1,19 @@
-﻿using EmploymentSystem.Core.Constant;
-using EmploymentSystem.Core.Contracts.Identity;
-using EmploymentSystem.Core.Dto;
-using EmploymentSystem.Core.Dto.Role;
-using EmploymentSystem.Core.Entities;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EmploymentSystem.BLL.Services.Identity
+﻿namespace EmploymentSystem.BLL.Services.Identity
 {
     public class RoleService : IRoleService
     {
+        #region fields
         private readonly RoleManager<ApplicationRole> _roleManager;
+        #endregion
 
+        #region ctor
         public RoleService(RoleManager<ApplicationRole> roleManager)
         {
             _roleManager = roleManager;
         }
+        #endregion
 
+        #region methods
         public async Task<bool> RoleExistsAsync(string roleName)
         {
             return await _roleManager.RoleExistsAsync(roleName);
@@ -59,5 +52,6 @@ namespace EmploymentSystem.BLL.Services.Identity
         {
             return _roleManager.Roles.FirstOrDefault(c => c.Id == RoleId)?.Name ?? null;
         }
+        #endregion
     }
 }

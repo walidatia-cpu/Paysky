@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using EmploymentSystem.Core.Entities;
-using EmploymentSystem.DAL.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using EmploymentSystem.BLL.Services;
+using EmploymentSystem.BLL.Services.Identity;
+using EmploymentSystem.BLL.Services.Vacancies;
+using EmploymentSystem.Core.Contracts;
 using EmploymentSystem.Core.Contracts.Identity;
+using EmploymentSystem.Core.Contracts.Vacancy;
+using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.JWT;
+using EmploymentSystem.DAL.Data;
+using EmploymentSystem.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using EmploymentSystem.Core.Contracts;
-using EmploymentSystem.Security;
-using EmploymentSystem.BLL.Services;
-using EmploymentSystem.BLL.Services.Identity;
 
 
 namespace EmploymentSystem.Extensions
@@ -52,6 +54,11 @@ namespace EmploymentSystem.Extensions
 
             #region Security
             services.AddScoped<JwtAuthorizeAttribute>();
+            #endregion
+
+            #region Vacancy
+            services.AddScoped<IVacancyService, VacancyService>();
+            services.AddScoped<IVacancyApplicantService, VacancyApplicantService>();
             #endregion
 
             return services;

@@ -1,10 +1,7 @@
-﻿using EmploymentSystem.Core.Dto.Account;
-using EmploymentSystem.Core.Dto;
-using EmploymentSystem.Core.Features.Account.Queries;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using EmploymentSystem.Core.Dto;
 using EmploymentSystem.Core.Features.Account.Commands;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmploymentSystem.Controllers.Account.Registration
 {

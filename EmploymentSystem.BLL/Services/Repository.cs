@@ -1,25 +1,21 @@
-﻿using EmploymentSystem.Core.Contracts;
-using EmploymentSystem.DAL.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EmploymentSystem.BLL.Services
+﻿namespace EmploymentSystem.BLL.Services
 {
     public class Repository<TEntity> : IAsyncRepository<TEntity> where TEntity : class
     {
+        #region fields
         private readonly AppDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
+        #endregion
 
+        #region ctor
         public Repository(AppDbContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
         }
+        #endregion
+
+        #region methods
         public async Task<TEntity> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
@@ -78,5 +74,8 @@ namespace EmploymentSystem.BLL.Services
         {
             return await _dbSet.FirstOrDefaultAsync(predicate);
         }
+
+        //
+        #endregion
     }
 }

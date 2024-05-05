@@ -2,11 +2,6 @@
 using EmploymentSystem.Core.Dto.Account;
 using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.ViewModel.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmploymentSystem.Core.Contracts.Identity
 {

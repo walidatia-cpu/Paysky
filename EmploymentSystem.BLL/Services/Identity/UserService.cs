@@ -1,33 +1,18 @@
-﻿using EmploymentSystem.Core.Constant;
-using EmploymentSystem.Core.Contracts.Identity;
-using EmploymentSystem.Core.Dto;
-using EmploymentSystem.Core.Dto.Account;
-using EmploymentSystem.Core.Entities;
-using EmploymentSystem.Core.JWT;
-using EmploymentSystem.Core.ViewModel.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EmploymentSystem.BLL.Services.Identity
+﻿namespace EmploymentSystem.BLL.Services.Identity
 {
     public class UserService : IUserService
     {
+        #region fields
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IRoleService _roleService;
-
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IOptions<JWTSettings> options;
         private readonly IHttpContextAccessor httpContextAccessor;
+
+        #endregion
+
+        #region ctor
 
         public UserService(UserManager<ApplicationUser> userManager, IRoleService roleRepository, RoleManager<ApplicationRole> roleManager, IOptions<JWTSettings> options, IHttpContextAccessor httpContextAccessor)
         {
@@ -37,6 +22,10 @@ namespace EmploymentSystem.BLL.Services.Identity
             this.options = options;
             this.httpContextAccessor = httpContextAccessor;
         }
+
+        #endregion
+
+        #region methods
 
         public async Task<bool> CheckEmailIsExistsAsync(string email)
         {
@@ -71,7 +60,7 @@ namespace EmploymentSystem.BLL.Services.Identity
 
                 }
                 else
-                    return new CommonResponse<string> { RequestStatus = RequestStatus.ServerError, Message = "ServerError" ,ModelError=result.Errors.Select(c=>string.Join(',',c.Description))};
+                    return new CommonResponse<string> { RequestStatus = RequestStatus.ServerError, Message = "ServerError", ModelError = result.Errors.Select(c => string.Join(',', c.Description)) };
             }
             catch (Exception ex)
             {
@@ -164,8 +153,10 @@ namespace EmploymentSystem.BLL.Services.Identity
 
         public async Task<bool> CheckPhoneIsExistsAsync(string phone)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(c=>c.PhoneNumber== phone);
+            var user = await _userManager.Users.FirstOrDefaultAsync(c => c.PhoneNumber == phone);
             return user != null;
         }
+
+        #endregion
     }
 }

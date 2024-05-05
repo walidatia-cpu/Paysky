@@ -1,15 +1,10 @@
 ﻿using EmploymentSystem.Core.Dto;
 using MediatR;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmploymentSystem.Core.Features.Account.Commands
 {
-    public class CreateUserCommand:IRequest<CommonResponse<string>>
+    public class CreateUserCommand : IRequest<CommonResponse<string>>
     {
         [Required(ErrorMessage = "User Name is required")]
         public string UserName { get; set; }

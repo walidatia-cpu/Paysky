@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using EmploymentSystem.Core.Dto;
 using Microsoft.AspNetCore.Mvc;
-using EmploymentSystem.Core.Dto;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EmploymentSystem.Filters.ActionFilter
 {

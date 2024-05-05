@@ -1,3 +1,4 @@
+using EmploymentSystem.AutoMapper;
 using EmploymentSystem.Extensions;
 using EmploymentSystem.Filters.ActionFilter;
 using FluentValidation;
@@ -14,7 +15,7 @@ foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 }
 //Register My Services
 builder.Services.AddMyDependencyGroup();
-//builder.Services.AddAutoMapper(typeof(MappingProfiles));
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(typeof(ValidateModelAttribute));

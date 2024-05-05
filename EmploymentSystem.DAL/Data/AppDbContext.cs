@@ -14,5 +14,9 @@ namespace EmploymentSystem.DAL.Data
             base.OnModelCreating(modelBuilder);
             ApplicationUser.Config(modelBuilder);
         }
+
+        public DbSet<Vacancy> Vacancies { get; set; }
+        public DbSet<VacancyApplicant> VacancyApplicants { get; set; }
+
     }
 }

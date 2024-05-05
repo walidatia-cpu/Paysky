@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EmploymentSystem.Core.Entities;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmploymentSystem.Core
 {
@@ -13,9 +10,15 @@ namespace EmploymentSystem.Core
         public Guid Id { get; set; }
         public bool IsActive { get; set; } = true;
         public bool IsDeleted { get; set; } = false;
-        public string? CreationBy { get; set; }
-        public DateTime CreationDate { get; set; }
+
+        [ForeignKey(nameof(CreationUser))]
+        public string CreationBy { get; set; }
+        public virtual ApplicationUser CreationUser { get; set; }
+
+        [ForeignKey(nameof(ModificationUser))]
         public string? LastModificationBy { get; set; }
+        public virtual ApplicationUser ModificationUser { get; set; }
+        public DateTime CreationDate { get; set; }
         public DateTime? LastModificationDate { get; set; }
 
     }

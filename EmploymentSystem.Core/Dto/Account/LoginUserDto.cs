@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EmploymentSystem.Core.Dto.Account
+﻿namespace EmploymentSystem.Core.Dto.Account
 {
     public class LoginUserDto
     {

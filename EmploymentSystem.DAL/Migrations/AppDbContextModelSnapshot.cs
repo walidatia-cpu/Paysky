@@ -147,6 +147,86 @@ namespace EmploymentSystem.DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("EmploymentSystem.Core.Entities.Vacancy", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreationBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("ExpiryDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModificationBy")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VacancyMaxNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreationBy");
+
+                    b.HasIndex("LastModificationBy");
+
+                    b.ToTable("Vacancies");
+                });
+
+            modelBuilder.Entity("EmploymentSystem.Core.Entities.VacancyApplicant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BIO")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("VacancyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantId");
+
+                    b.HasIndex("VacancyId");
+
+                    b.ToTable("VacancyApplicants");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -253,6 +333,42 @@ namespace EmploymentSystem.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EmploymentSystem.Core.Entities.Vacancy", b =>
+                {
+                    b.HasOne("EmploymentSystem.Core.Entities.ApplicationUser", "CreationUser")
+                        .WithMany()
+                        .HasForeignKey("CreationBy")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EmploymentSystem.Core.Entities.ApplicationUser", "ModificationUser")
+                        .WithMany()
+                        .HasForeignKey("LastModificationBy");
+
+                    b.Navigation("CreationUser");
+
+                    b.Navigation("ModificationUser");
+                });
+
+            modelBuilder.Entity("EmploymentSystem.Core.Entities.VacancyApplicant", b =>
+                {
+                    b.HasOne("EmploymentSystem.Core.Entities.ApplicationUser", "ApplicantUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EmploymentSystem.Core.Entities.Vacancy", "Vacancy")
+                        .WithMany("VacancyApplicants")
+                        .HasForeignKey("VacancyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicantUser");
+
+                    b.Navigation("Vacancy");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("EmploymentSystem.Core.Entities.ApplicationRole", null)
@@ -302,6 +418,11 @@ namespace EmploymentSystem.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EmploymentSystem.Core.Entities.Vacancy", b =>
+                {
+                    b.Navigation("VacancyApplicants");
                 });
 #pragma warning restore 612, 618
         }
