@@ -11,5 +11,6 @@
         public bool IsActive { get; set; }
         public string CreationDate { get; set; }
         public string? LastModificationDate { get; set; }
+        public int ApplicantCount { get; set; }
     }
 }

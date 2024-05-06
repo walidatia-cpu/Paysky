@@ -76,7 +76,12 @@ namespace EmploymentSystem.Controllers.Vacancies
             return await mediator.Send(model);
         }
 
-
+        [HttpPost]
+        [Route("MyVacancies")]
+        public async Task<CommonResponse<List<VacancyDto>>> MyVacancies([FromBody] GetMyApplicantVacanciesQuery model)
+        {
+            return await mediator.Send(model);
+        }
         #endregion
     }
 }

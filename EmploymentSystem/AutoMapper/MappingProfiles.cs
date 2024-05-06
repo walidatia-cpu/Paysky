@@ -31,8 +31,10 @@ namespace EmploymentSystem.AutoMapper
         }
         void _GetAllVacanciesQueryMap()
         {
-            CreateMap<Vacancy, VacancyDto>();
+            CreateMap<Vacancy, VacancyDto>().
+                ForMember(dest=>dest.ApplicantCount,opt=>opt.MapFrom(src=>src.VacancyApplicants.Count));
         }
+
         void _CreateVacancyApplicantCommandMap()
         {
             CreateMap<CreateVacancyApplicantCommand, VacancyApplicant>();
@@ -41,6 +43,8 @@ namespace EmploymentSystem.AutoMapper
         {
             CreateMap<Vacancy, SearchForVacancyDto>();
         }
+       
+       
 
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace EmploymentSystem.BLL.Services.Vacancies
+﻿
+using EmploymentSystem.Core.Entities;
+
+namespace EmploymentSystem.BLL.Services.Vacancies
 {
     public class VacancyApplicantService : IVacancyApplicantService
     {
@@ -37,8 +40,13 @@
                 if (_vacancy.IsActive == false || _vacancy.IsDeleted == true || _vacancy.IsArchived == true)
                     return new CommonResponse<string> { RequestStatus = RequestStatus.BadRequest, Message = " The vacancy is not available" };
 
-                // check if Applicant is  apply for more than one vacancy per day (24 hours)
                 var _currentUser = await userService.GetCurrentUser();
+                // check  if Applicant is  applied for  this vacancy before
+                if (await repository.FirstOrDefaultAsync(c => c.ApplicantId == _currentUser.Id && c.VacancyId.ToString() == command.VacancyId) != null)
+                    return new CommonResponse<string> { RequestStatus = RequestStatus.BadRequest, Message = "sorry, you have applied for this vacancy before" };
+
+                // check if Applicant is  apply for more than one vacancy per day (24 hours)
+
                 var lastVacancyApplicant = (await repository.GetAllAsync(c => c.ApplicantId == _currentUser.Id)).OrderByDescending(c => c.CreationDate).FirstOrDefault();
                 if (lastVacancyApplicant is not null && DateTime.Now.AddHours(-24) < lastVacancyApplicant.CreationDate)
                     return new CommonResponse<string> { RequestStatus = RequestStatus.BadRequest, Message = "sorry, Not allowed to apply for more than one vacancy per day (24 hours)" };
@@ -74,6 +82,39 @@
             catch (Exception)
             {
                 return new CommonResponse<string> { RequestStatus = RequestStatus.ServerError, Message = "ServerError" };
+            }
+        }
+
+        public async Task<CommonResponse<List<VacancyDto>>> GetMyApplicantVacancies(GetMyApplicantVacanciesQuery query)
+        {
+            try
+            {
+                var _currentUser = await userService.GetCurrentUser();
+                var _vacancies = await repository.GetAllAsync(c => c.ApplicantId == _currentUser.Id
+                                                              && c.CreationDate.Date >= query.CreationDateFrom.Date
+                                                              && c.CreationDate.Date <= query.CreationDateTo.Date
+                                                              && c.Vacancy.IsDeleted != true
+                                                              && c.Vacancy.IsArchived != true
+                                                              , query.Page, query.PageCount);
+                var _result = _vacancies.Select(c => new VacancyDto
+                {
+                    Description = c.Vacancy.Description,
+                    CreationDate = c.CreationDate.ToString(),
+                    IsArchived = c.Vacancy.IsArchived,
+                    ExpiryDate = c.Vacancy.ExpiryDate.ToString(),
+                    IsActive = c.Vacancy.IsActive,
+                    LastModificationDate = c.CreationDate.ToString(),
+                    Title = c.Vacancy.Title,
+                    VacancyMaxNumber = c.Vacancy.VacancyMaxNumber,
+                    Id=c.VacancyId
+
+                }).ToList();
+                return new CommonResponse<List<VacancyDto>> { RequestStatus = RequestStatus.Success, Message = "Success", Data = _result };
+            }
+            catch (Exception)
+            {
+                return new CommonResponse<List<VacancyDto>> { RequestStatus = RequestStatus.ServerError, Message = "ServerError" };
+
             }
         }
         #endregion
