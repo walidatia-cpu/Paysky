@@ -9,5 +9,6 @@ namespace EmploymentSystem.Core.Contracts.Vacancy
     {
         Task<CommonResponse<string>> ApplyVacancy(CreateVacancyApplicantCommand command);
         Task<CommonResponse<List<VacancyDto>>> GetMyApplicantVacancies(GetMyApplicantVacanciesQuery query);
+        Task<CommonResponse<List<ApplicantDto>>> GetVacancyApplicant(GetVacancyApplicantQuery query);
     }
 }

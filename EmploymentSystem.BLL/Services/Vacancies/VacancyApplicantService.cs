@@ -106,7 +106,7 @@ namespace EmploymentSystem.BLL.Services.Vacancies
                     LastModificationDate = c.CreationDate.ToString(),
                     Title = c.Vacancy.Title,
                     VacancyMaxNumber = c.Vacancy.VacancyMaxNumber,
-                    Id=c.VacancyId
+                    Id = c.VacancyId
 
                 }).ToList();
                 return new CommonResponse<List<VacancyDto>> { RequestStatus = RequestStatus.Success, Message = "Success", Data = _result };
@@ -114,6 +114,44 @@ namespace EmploymentSystem.BLL.Services.Vacancies
             catch (Exception)
             {
                 return new CommonResponse<List<VacancyDto>> { RequestStatus = RequestStatus.ServerError, Message = "ServerError" };
+
+            }
+        }
+
+        public async Task<CommonResponse<List<ApplicantDto>>> GetVacancyApplicant(GetVacancyApplicantQuery query)
+        {
+            try
+            {
+                #region validation
+                // check user if is Employer
+                var _currentUser = await userService.GetCurrentUser();
+                if (!await userService.CkeckUserInRole(_currentUser, Role.Employer.ToString()))
+                    return new CommonResponse<List<ApplicantDto>> { RequestStatus = RequestStatus.BadRequest, Message = "sorry, You are not allowed to view Applicant vacancy" };
+                var _vacancy = await vacancyRepo.FirstOrDefaultAsync(c => c.Id.ToString() == query.VacancyId);
+                if (_vacancy == null)
+                    return new CommonResponse<List<ApplicantDto>> { RequestStatus = RequestStatus.BadRequest, Message = "The vacancy ID is invalid" };
+                if (_vacancy.CreationBy != _currentUser.Id)
+                    return new CommonResponse<List<ApplicantDto>> { RequestStatus = RequestStatus.BadRequest, Message = "You do not have permission to view applicat vacancy as you are not the one who created it" };
+
+                var vacancyApplicants = await repository.GetAllAsync(c => c.VacancyId.ToString() == query.VacancyId);
+
+                var _result = vacancyApplicants.Select(c => new ApplicantDto
+                {
+                    BIO = c.BIO,
+                    CreationDate = c.CreationDate.ToString(),
+                    Email = c.ApplicantUser.Email,
+                    FullName = c.ApplicantUser.FullName,
+                    PhoneNumber = c.ApplicantUser.PhoneNumber
+
+                }).ToList();
+                return new CommonResponse<List<ApplicantDto>> { RequestStatus = RequestStatus.Success, Message = "Success",Data=_result };
+
+                #endregion
+            }
+            catch (Exception)
+            {
+
+                return new CommonResponse<List<ApplicantDto>> { RequestStatus = RequestStatus.ServerError, Message = "ServerError" };
 
             }
         }

@@ -26,6 +26,7 @@ namespace EmploymentSystem.Controllers.Vacancies
 
         #region methods
 
+        #region Employer
         [HttpPost]
         [Route("CreateVacancy")]
         public async Task<CommonResponse<string>> CreateVacancy([FromBody] CreateVacancyCommand model)
@@ -63,6 +64,16 @@ namespace EmploymentSystem.Controllers.Vacancies
         }
 
         [HttpPost]
+        [Route("GetVacancyApplicant")]
+        public async Task<CommonResponse<List<ApplicantDto>>> GetVacancyApplicant([FromBody] GetVacancyApplicantQuery model)
+        {
+            return await mediator.Send(model);
+        }
+        #endregion Employer
+
+        #region Applicant
+
+        [HttpPost]
         [Route("ApplyVacancy")]
         public async Task<CommonResponse<string>> ApplyVacancy([FromBody] CreateVacancyApplicantCommand model)
         {
@@ -82,6 +93,8 @@ namespace EmploymentSystem.Controllers.Vacancies
         {
             return await mediator.Send(model);
         }
-        #endregion
+        #endregion applicant
+
+        #endregion methods
     }
 }
