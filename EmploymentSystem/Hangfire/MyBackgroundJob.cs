@@ -1,5 +1,4 @@
 ﻿using EmploymentSystem.Core.Contracts.Vacancy;
-using MediatR;
 
 namespace EmploymentSystem.Hangfire
 {
@@ -12,7 +11,7 @@ namespace EmploymentSystem.Hangfire
             _serviceProvider = serviceProvider;
         }
 
-        public  void ArchivExpiredVacancies()
+        public void ArchivExpiredVacancies()
         {
             // Create a scope to resolve scoped or transient services
             using (var scope = _serviceProvider.CreateScope())
@@ -20,9 +19,9 @@ namespace EmploymentSystem.Hangfire
                 // Resolve the service
                 var myService = scope.ServiceProvider.GetRequiredService<IVacancyService>();
                 // Use the service
-                 myService.ArchivExpiredVacancies().Wait();
+                myService.ArchivExpiredVacancies().Wait();
             }
         }
-       
+
     }
 }

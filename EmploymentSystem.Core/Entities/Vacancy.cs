@@ -17,7 +17,7 @@ namespace EmploymentSystem.Core.Entities
 
         public static void Config(ModelBuilder modelBuilder)
         {
-            
+
             modelBuilder.Entity<Vacancy>()
                 .HasIndex(u => u.Title);
 

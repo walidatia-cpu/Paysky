@@ -5,8 +5,6 @@ using EmploymentSystem.Hangfire;
 using FluentValidation;
 using Hangfire;
 using Hangfire.Dashboard;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,7 +51,7 @@ if (app.Environment.IsDevelopment())
 #region Hangfire
 // Use Hangfire server and dashboard
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
-    {
+{
     // Configure Hangfire Dashboard options here
     IsReadOnlyFunc = (DashboardContext context) => false
 });

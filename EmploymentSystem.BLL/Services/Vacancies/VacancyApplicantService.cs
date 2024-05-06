@@ -1,7 +1,4 @@
-﻿
-using EmploymentSystem.Core.Entities;
-
-namespace EmploymentSystem.BLL.Services.Vacancies
+﻿namespace EmploymentSystem.BLL.Services.Vacancies
 {
     public class VacancyApplicantService : IVacancyApplicantService
     {
@@ -144,7 +141,7 @@ namespace EmploymentSystem.BLL.Services.Vacancies
                     PhoneNumber = c.ApplicantUser.PhoneNumber
 
                 }).ToList();
-                return new CommonResponse<List<ApplicantDto>> { RequestStatus = RequestStatus.Success, Message = "Success",Data=_result };
+                return new CommonResponse<List<ApplicantDto>> { RequestStatus = RequestStatus.Success, Message = "Success", Data = _result };
 
                 #endregion
             }

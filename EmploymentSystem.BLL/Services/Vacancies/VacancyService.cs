@@ -212,8 +212,8 @@
         {
             try
             {
-               
-                var _Vacancies = await repository.GetAllAsync(c => c.ExpiryDate <= DateTime.Now && c.IsArchived !=true);
+
+                var _Vacancies = await repository.GetAllAsync(c => c.ExpiryDate <= DateTime.Now && c.IsArchived != true);
                 _Vacancies.ToList().ForEach(v => { v.IsArchived = true; });
                 await unitOfWork.SaveChangesAsync();
 
