@@ -18,6 +18,7 @@ namespace EmploymentSystem.AutoMapper
             _UpdateVacancyCommandMap();
             _GetAllVacanciesQueryMap();
             _CreateVacancyApplicantCommandMap();
+            _SearchForVacancyQueryMap();
             #endregion
         }
         void _CreateVacancyCommandMap()
@@ -35,6 +36,10 @@ namespace EmploymentSystem.AutoMapper
         void _CreateVacancyApplicantCommandMap()
         {
             CreateMap<CreateVacancyApplicantCommand, VacancyApplicant>();
+        }
+        void _SearchForVacancyQueryMap()
+        {
+            CreateMap<Vacancy, SearchForVacancyDto>();
         }
 
     }

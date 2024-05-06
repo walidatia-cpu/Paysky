@@ -12,5 +12,7 @@ namespace EmploymentSystem.Core.Contracts.Vacancy
         Task<CommonResponse<string>> DeleteVacancy(DeleteVacancyCommand command);
         Task<CommonResponse<string>> ToggleVacancyStatus(ToggleVacancyStatusCommand command);
         Task<CommonResponse<List<VacancyDto>>> GetAllVacancies(GetAllVacanciesQuery query);
+        Task<CommonResponse<List<SearchForVacancyDto>>> SearchForVacancy(SearchForVacancyQuery query);
+        Task ArchivExpiredVacancies();
     }
 }

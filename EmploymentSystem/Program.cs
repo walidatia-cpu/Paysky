@@ -1,7 +1,12 @@
 using EmploymentSystem.AutoMapper;
 using EmploymentSystem.Extensions;
 using EmploymentSystem.Filters.ActionFilter;
+using EmploymentSystem.Hangfire;
 using FluentValidation;
+using Hangfire;
+using Hangfire.Dashboard;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,18 +34,42 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.AddGlobalErrorHandler();
 
+#region migrate database
 // migrate database 
 using (var scope = app.Services.CreateScope())
 {
     scope.MigrateDatabase();
     await scope.SeedDefaultData();
 }
+#endregion
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+#region Hangfire
+// Use Hangfire server and dashboard
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+    // Configure Hangfire Dashboard options here
+    IsReadOnlyFunc = (DashboardContext context) => false
+});
+app.UseHangfireServer();
+
+// Create a scope to resolve services
+using (var scope = app.Services.CreateScope())
+{
+    // Get an instance of your background job class from the service provider
+    var backgroundJob = scope.ServiceProvider.GetService<MyBackgroundJob>();
+    // Schedule the job to run daily
+    RecurringJob.AddOrUpdate(() => backgroundJob.ArchivExpiredVacancies(), Cron.Hourly);
+}
+
+#endregion
+
 
 app.UseCors(builder => builder
        .AllowAnyHeader()

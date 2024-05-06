@@ -7,7 +7,9 @@ using EmploymentSystem.Core.Contracts.Vacancy;
 using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.JWT;
 using EmploymentSystem.DAL.Data;
+using EmploymentSystem.Hangfire;
 using EmploymentSystem.Security;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +40,13 @@ namespace EmploymentSystem.Extensions
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+
+            services.AddHangfire(configx =>
+               configx.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                     .UseSimpleAssemblyNameTypeSerializer()
+                     .UseRecommendedSerializerSettings()
+                     .UseSqlServerStorage(config.GetConnectionString("HangfireConnection")));
+
             return services;
         }
         public static IServiceCollection AddMyDependencyGroup(this IServiceCollection services)
@@ -59,6 +68,10 @@ namespace EmploymentSystem.Extensions
             #region Vacancy
             services.AddScoped<IVacancyService, VacancyService>();
             services.AddScoped<IVacancyApplicantService, VacancyApplicantService>();
+            #endregion
+
+            #region BackgroundJob
+            services.AddSingleton<MyBackgroundJob>();
             #endregion
 
             return services;

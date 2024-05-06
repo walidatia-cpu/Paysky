@@ -13,6 +13,7 @@ namespace EmploymentSystem.DAL.Data
         {
             base.OnModelCreating(modelBuilder);
             ApplicationUser.Config(modelBuilder);
+            Vacancy.Config(modelBuilder);
         }
 
         public DbSet<Vacancy> Vacancies { get; set; }

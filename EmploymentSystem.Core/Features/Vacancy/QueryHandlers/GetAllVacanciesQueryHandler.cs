@@ -10,6 +10,7 @@ namespace EmploymentSystem.Core.Features.Vacancy.QueryHandlers
     {
         private readonly IVacancyService vacancyService;
 
+
         public GetAllVacanciesQueryHandler(IVacancyService vacancyService)
         {
             this.vacancyService = vacancyService;

@@ -29,7 +29,7 @@
             try
             {
                 #region validation
-                // check user if is 
+                // check user if is Employer
                 var _currentUser = await userService.GetCurrentUser();
                 if (!await userService.CkeckUserInRole(_currentUser, Role.Employer.ToString()))
                     return new CommonResponse<string> { RequestStatus = RequestStatus.BadRequest, Message = "sorry, You are not allowed to create vacancy" };
@@ -186,6 +186,45 @@
                 return new CommonResponse<List<VacancyDto>> { RequestStatus = RequestStatus.ServerError, Message = "ServerError" };
             }
         }
+
+        public async Task<CommonResponse<List<SearchForVacancyDto>>> SearchForVacancy(SearchForVacancyQuery query)
+        {
+            try
+            {
+                #region validation
+                // check user if is Applicant
+                var _currentUser = await userService.GetCurrentUser();
+                if (!await userService.CkeckUserInRole(_currentUser, Role.Applicant.ToString()))
+                    return new CommonResponse<List<SearchForVacancyDto>> { RequestStatus = RequestStatus.BadRequest, Message = "sorry, You are not allowed to search for vacancy" };
+                #endregion
+                var _Vacancies = await repository.GetAllAsync(c => (c.Title.Contains(query.SearchTerm) || c.Description.Contains(query.SearchTerm)) && c.IsDeleted != true && c.IsArchived != true);
+
+                return new CommonResponse<List<SearchForVacancyDto>> { RequestStatus = RequestStatus.Success, Message = "Success", Data = mapper.Map<List<SearchForVacancyDto>>(_Vacancies) };
+
+            }
+            catch (Exception)
+            {
+                return new CommonResponse<List<SearchForVacancyDto>> { RequestStatus = RequestStatus.ServerError, Message = "ServerError" };
+            }
+        }
+
+        public async Task ArchivExpiredVacancies()
+        {
+            try
+            {
+               
+                var _Vacancies = await repository.GetAllAsync(c => c.ExpiryDate <= DateTime.Now && c.IsArchived !=true);
+                _Vacancies.ToList().ForEach(v => { v.IsArchived = true; });
+                await unitOfWork.SaveChangesAsync();
+
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+
 
 
         #endregion
